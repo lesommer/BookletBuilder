@@ -3,12 +3,26 @@ import subprocess
 from jinja2 import Environment, FileSystemLoader
 import re
 
+def extract_urls(text):
+    """
+    Extracts URLs from text, excluding trailing brackets.
+    """
+    # Match URLs, but don't include trailing ) or ]
+    url_pattern = r'(https?://[^\s\)\]]+)'
+    return re.findall(url_pattern, text)
+
 def replace_urls_with_footnotes(text):
-    url_pattern = r'(https?://[^\s]+)'
+    """
+    Replaces URLs in text with LaTeX footnotes, excluding trailing brackets.
+    """
+    # Match URLs, but don't include trailing ) or ]
+    url_pattern = r'(https?://[^\s\)\]]+)'
     def replacer(match):
-        url = match.group(0)
+        url = match.group(1)
         return r'\footnote{\url{' + url + '}}'
+    # Replace only the URL part, not the bracket
     return re.sub(url_pattern, replacer, text)
+
 
 def escape_latex(text, skip_urls=False):
     if not text:
