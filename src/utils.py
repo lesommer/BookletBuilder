@@ -1,33 +1,59 @@
 import os
 import subprocess
 from jinja2 import Environment, FileSystemLoader
+import re
+
+def escape_latex(text, skip_urls=False):
+    if not text:
+        return ""
+    if skip_urls:
+        # Replace URLs with a placeholder, escape, then restore
+        url_pattern = r'(https?://[^\s]+)'
+        urls = re.findall(url_pattern, text)
+        for i, url in enumerate(urls):
+            text = text.replace(url, f"URLPLACEHOLDER{i}")
+        # Escape the rest
+        replacements = {
+            '&': r'\&',
+            '%': r'\%',
+            '$': r'\$',
+            '#': r'\#',
+            '_': r'\_',
+            '{': r'\{',
+            '}': r'\}',
+            '~': r'\textasciitilde{}',
+            '^': r'\^{}',
+            '\\': r'\textbackslash{}',
+        }
+        for key, value in replacements.items():
+            text = text.replace(key, value)
+        # Restore URLs
+        for i, url in enumerate(urls):
+            text = text.replace(f"URLPLACEHOLDER{i}", url)
+        return text
+    else:
+        # Escape everything
+        replacements = {
+            '&': r'\&',
+            '%': r'\%',
+            '$': r'\$',
+            '#': r'\#',
+            '_': r'\_',
+            '{': r'\{',
+            '}': r'\}',
+            '~': r'\textasciitilde{}',
+            '^': r'\^{}',
+            '\\': r'\textbackslash{}',
+        }
+        for key, value in replacements.items():
+            text = text.replace(key, value)
+        return text
 
 def ensure_output_dir(output_dir="output"):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     return output_dir
 
-def escape_latex(text):
-    """
-    Escapes LaTeX special characters in the given text.
-    """
-    if not text:
-        return ""
-    replacements = {
-        '&': r'\&',
-        '%': r'\%',
-        '$': r'\$',
-        '#': r'\#',
-        '_': r'\_',
-        '{': r'\{',
-        '}': r'\}',
-        '~': r'\textasciitilde{}',
-        '^': r'\^{}',
-        '\\': r'\textbackslash{}',
-    }
-    for key, value in replacements.items():
-        text = text.replace(key, value)
-    return text
 
 def render_latex_template(data, template_path="src/latex_template.tex", output_dir="output"):
     ensure_output_dir(output_dir)

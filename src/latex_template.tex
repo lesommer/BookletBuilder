@@ -1,19 +1,25 @@
+
 \documentclass{article}
+\usepackage{hyperref}
 \begin{document}
 
 {% for entry in data %}
 \section*{{ '{' }}{{ entry.title | escape_latex }}{{ '}' }}
 
-\textbf{Author(s):} {{ entry.firstname }} {{ entry.lastname }}{% if entry.coauthors %}, {{ entry.coauthors }}{% endif %} \\
-%\textbf{Affiliation:} {{ entry.affiliation }} \\
+\textbf{Authors:} {{ entry.firstname }} {{ entry.lastname }}{% if entry.coauthors %}, {{ entry.coauthors }}{% endif %} \\
+\textbf{Affiliation:} {{ entry.affiliation }} \\
 \textbf{Format:} {{ entry.format }} \\
 
 \vspace{1em}
 \textbf{Abstract:}
 
-{{ entry.abstract }}
+{{ entry.abstract | safe }}
 
 \newpage
 {% endfor %}
 
 \end{document}
+
+
+
+
