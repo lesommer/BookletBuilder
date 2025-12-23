@@ -1,15 +1,8 @@
 from google_sheets import get_sheet_data
-from utils import render_latex_template, compile_latex_to_pdf
+from utils import render_latex_template, compile_latex_to_pdf,replace_urls_with_footnotes
 from dotenv import load_dotenv
 import os
 import re
-
-def replace_urls_with_footnotes(text):
-    url_pattern = r'(https?://[^\s]+)'
-    def replacer(match):
-        url = match.group(0)
-        return r'\footnote{\url{' + url + '}}'
-    return re.sub(url_pattern, replacer, text)
 
 def main():
     # Replace with your actual spreadsheet ID and range

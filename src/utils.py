@@ -3,6 +3,13 @@ import subprocess
 from jinja2 import Environment, FileSystemLoader
 import re
 
+def replace_urls_with_footnotes(text):
+    url_pattern = r'(https?://[^\s]+)'
+    def replacer(match):
+        url = match.group(0)
+        return r'\footnote{\url{' + url + '}}'
+    return re.sub(url_pattern, replacer, text)
+
 def escape_latex(text, skip_urls=False):
     if not text:
         return ""
