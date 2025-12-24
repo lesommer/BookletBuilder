@@ -1,25 +1,71 @@
-
-\documentclass{article}
+\documentclass[12pt]{article}
 \usepackage{hyperref}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amstext}
+\usepackage{amsbsy}
+\usepackage{amsopn}
+
+% Define abstract environment
+\renewenvironment{abstract}
+ {\small
+  \begin{center}
+  \bfseries \abstractname\vspace{-.5em}\vspace{0pt}
+  \end{center}
+  \list{}{
+    \setlength{\leftmargin}{.0cm}%
+    \setlength{\rightmargin}{\leftmargin}%
+  }%
+  \item\relax}
+ {\endlist}
+
+% Header and Footer configuration
+ \usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{DRAKKAR 2026 workshop booklet}
+
+%\cfoot{center of the footer!}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
 \begin{document}
 
 {% for entry in data %}
-\section*{{ '{' }}{{ entry.title | escape_latex }}{{ '}' }}
 
-\textbf{Authors:} {{ entry.firstname }} {{ entry.lastname }}{% if entry.coauthors %}, {{ entry.coauthors }}{% endif %} \\
-\textbf{Affiliation:} {{ entry.affiliation }} \\
-\textbf{Format:} {{ entry.format }} \\
+%\section*{{ '{' }}{{ entry.title | escape_latex }}{{ '}' }}
+
+\section*{\centering{ {{ entry.title | escape_latex }} }}
 
 \vspace{1em}
-\textbf{Abstract:}
+
+\begin{center}
+\textbf{ {{ entry.firstname }} {{ entry.lastname }}}{% if entry.coauthors %}, {{ entry.coauthors }}{% endif %} \\
+
+\vspace{0.5em}
+
+{{ entry.affiliation }} \\
+
+ 
+\end{center}
+
+
+%\vspace{1em}
+
+\begin{abstract}
 
 {{ entry.abstract | safe }}
+
+\end{abstract}
+
+\textbf{Type of contribution:} {{ entry.format }} \\
+
+
 
 \newpage
 {% endfor %}
 
 \end{document}
-
-
-
 
